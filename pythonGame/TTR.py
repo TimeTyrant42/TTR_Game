@@ -92,7 +92,7 @@ class Background(pygame.sprite.Sprite):
         self.rect.left, self.rect.top = location
 
 
-BackGround = Background('Ticket To Ride Assets\BackGrounds\Background.png', [0, 0])
+BackGround = Background('Ticket To Ride Assets\BackGrounds\map.png', [0, 0])
 TitleScreenImg = Background('Ticket To Ride Assets\BackGrounds\TitleScreen.png', [0, 0])
 
 
@@ -136,6 +136,9 @@ class City:
     def setY(self, y):
         self.y = y
 
+    def getPos(self):
+        return self.x, self.y
+
     def getName(self):
         return self.name
 
@@ -178,9 +181,10 @@ class Edge:
 
 # numNodes = input('How many cities?')
 cityNames = ['Los Angeles', 'Seattle', 'New York', 'Dallas', 'Salt Lake', 'Milwaukee', 'Chicago']
-cities = [City(1, 2, 'Los Angeles', red), City(3, 4, 'Seattle', blue), City(5, 6, 'New York', green),
-          City(6, 7, 'Dallas', black), City(7, 8, 'Salt Lake', white), City(8, 9, 'Milwaukee', red),
-          City(10, 11, 'Chicago', blue)]
+cities = [City(146, 386, 'Los Angeles', red), City(106, 122, 'Seattle', blue), City(915, 163, 'New York', green),
+          City(568, 401, 'Dallas', black), City(268, 259, 'Salt Lake', white), City(674, 176, 'Milwaukee', red),
+          City(700, 208, 'Chicago', blue)]
+
 cityConnection = ([[-1, Edge(3, [0, 1], 'black'), -1, Edge(5, [0, 3], 'white'), Edge(2, [0, 4], 'black'), -1, -1],
                    [Edge(3, [1, 0], 'black'), -1, Edge(4, [1, 2], 'white'), -1, -1, -1, -1],
                    [-1, Edge(4, [2, 1], 'white'), -1, Edge(6, [2, 3], 'black'), -1, Edge(4, [2, 5], 'black'), -1],
@@ -274,6 +278,7 @@ def gameLoop():
 
     running = True
     while running:
+        print(pygame.mouse.get_pos())
         button("Title Screen", 17, display_width * 0.85, display_height * 0.05, 100, 75, blue, darkBlue, titleScreen)
         button("Coward", 20, display_width * 0.85, display_height * 0.8, 100, 75, red, darkRed, quitGame)
 
@@ -288,7 +293,7 @@ def gameLoop():
 
                 elif whiteDeck.collidepoint(pos):
                     print('added white card to your hand')
-                    handCards.append(Card('white',randint(1,10)))
+                    handCards.append(Card('white', randint(1, 10)))
                     print(handCards[cardIndex].length)
                     # pos = (display_width * 0.05 + (50 * cardIndex), display_height * 0.05)
                     screen.blit(whiteTrainImg, (display_width * 0.05 + (50 * cardIndex), display_height * 0.05))
@@ -296,49 +301,49 @@ def gameLoop():
 
                 elif pinkDeck.collidepoint(pos):
                     print('added pink card to your hand')
-                    handCards.append(Card('pink',randint(1,10)))
+                    handCards.append(Card('pink', randint(1, 10)))
                     print(handCards[cardIndex].length)
                     screen.blit(pinkTrainImg, (display_width * 0.05 + (50 * cardIndex), display_height * 0.05))
                     cardIndex += 1
 
                 elif redDeck.collidepoint(pos):
                     print('added red card to your hand')
-                    handCards.append(Card('red',randint(1,10)))
+                    handCards.append(Card('red', randint(1, 10)))
                     print(handCards[cardIndex].length)
                     screen.blit(redTrainImg, (display_width * 0.05 + (50 * cardIndex), display_height * 0.05))
                     cardIndex += 1
 
                 elif orangeDeck.collidepoint(pos):
                     print('added orange card to your hand')
-                    handCards.append(Card('orange',randint(1,10)))
+                    handCards.append(Card('orange', randint(1, 10)))
                     print(handCards[cardIndex].length)
                     screen.blit(orangeTrainImg, (display_width * 0.05 + (50 * cardIndex), display_height * 0.05))
                     cardIndex += 1
 
                 elif yellowDeck.collidepoint(pos):
                     print('added yellow card to your hand')
-                    handCards.append(Card('yellow',randint(1,10)))
+                    handCards.append(Card('yellow', randint(1, 10)))
                     print(handCards[cardIndex].length)
                     screen.blit(yellowTrainImg, (display_width * 0.05 + (50 * cardIndex), display_height * 0.05))
                     cardIndex += 1
 
                 elif greenDeck.collidepoint(pos):
                     print('added green card to your hand')
-                    handCards.append(Card('green',randint(1,10)))
+                    handCards.append(Card('green', randint(1, 10)))
                     print(handCards[cardIndex].length)
                     screen.blit(greenTrainImg, (display_width * 0.05 + (50 * cardIndex), display_height * 0.05))
                     cardIndex += 1
 
                 elif blueDeck.collidepoint(pos):
                     print('added blue card to your hand')
-                    handCards.append(Card('blue',randint(1,10)))
+                    handCards.append(Card('blue', randint(1, 10)))
                     print(handCards[cardIndex].length)
                     screen.blit(blueTrainImg, (display_width * 0.05 + (50 * cardIndex), display_height * 0.05))
                     cardIndex += 1
 
                 elif blackDeck.collidepoint(pos):
                     print('added black card to your hand')
-                    handCards.append(Card('black',randint(1,10)))
+                    handCards.append(Card('black', randint(1, 10)))
                     print(handCards[cardIndex].length)
                     screen.blit(blackTrainImg, (display_width * 0.05 + (50 * cardIndex), display_height * 0.05))
                     cardIndex += 1
