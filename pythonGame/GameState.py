@@ -137,7 +137,7 @@ class GameState:
                 for j in range(len(allColors)):
                     if self.p1Hand[i] == allColors[j]: Up1c[j] += 1
 
-            return [self.turn, self.LastFullAction, UtrackArray, destPoints, Up1d, Up1c, self.p1Points]
+            return [self.turn, self.LastFullAction, UtrackArray, destPoints, Up1d, Up1c[0,-1], self.p1Points]
 
         elif self.LastP == 'playerTwo':
             Up2d = np.zeros(len(destDeck))
@@ -150,4 +150,4 @@ class GameState:
                 for j in range(len(allColors)):
                     if self.p2Hand[i] == allColors[j]: Up2c[j] += 1
 
-            return [self.turn, self.LastFullAction, UtrackArray, destPoints, Up2d, Up2c, self.p2Points]
+            return [self.turn, self.LastFullAction, UtrackArray, destPoints, Up2d, Up2c[0,-1], self.p2Points]
