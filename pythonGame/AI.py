@@ -3,15 +3,18 @@ import numpy as np
 
 from Card import Card
 from Player import Player
-
-
+from Strategy import Strategy
 class AI(Player):
     def __init__(self, name):
         Player.__init__(self, name)
+        self.strategy = Strategy()
+        print(self.name + " follows the " + self.strategy.strategyName + " strategy.")
 
     def makeMove(self, state):
-        print("AI has not been programed to make a decision yet")
-        return ['draw t']
+        decision = self.strategy.makeDecision(state, self)
+        for card in self.handCards:
+            print(card.color)
+        return decision
 
 
 class randomAI(Player):
@@ -57,3 +60,4 @@ class randomAI(Player):
 
         self.cardIndex = len(self.getHand())
         return [move, arg]
+
