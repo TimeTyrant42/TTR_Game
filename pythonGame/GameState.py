@@ -26,9 +26,9 @@ class GameState:
         self.p2Hand = p2.getHand()
         self.p1Points = p1.points
         self.p2Points = p2.points
-        self.p1Action = None
-        self.p2Action = None
-        self.LastFullAction = None
+        self.p1Action = 'pass'
+        self.p2Action = 'pass'
+        self.LastFullAction = 'pass'
         self.LastP = 'playerOne'
         self.append_list_as_row(self.player1, self.fields)
         self.append_list_as_row(self.player2, self.fields)
@@ -122,30 +122,43 @@ class GameState:
     #     return [self.turn,]
 
     # alexs function to test input output data for nn
-    def writeToNPY(self):
+    def returnNPY(self):  # ONLY BLACK / WHITE, NO DESTINATION CARDS, possibly static track colors
+
+        color_map = {'white': 1,
+                     'black': -1}
+
+        action_map = {'pass': 0,
+                      'draw t': 1,
+                      'claim': 2,
+                      'draw d': -1}
+
+        player_map = {'playerOne': 1,
+                      'playerTwo': -1,
+                      'False': 0}
+
         UtrackArray = np.array(self.trackArray)
         UtrackArray = UtrackArray[np.triu_indices(len(UtrackArray))]
         UtrackArray = UtrackArray[UtrackArray != -1]
-        UtrackArray = np.array([[x.length, x.color, x.occupied] for x in UtrackArray])
+        UtrackArray = np.array([[x.length * color_map[x.color], player_map[x.occupied]] for x in UtrackArray])
         UtrackArray = UtrackArray.flatten()
 
         # square[np.triu_indices(10, 1)].shape
 
-        destDeck = DestinationCard.getDestinationDeck()
+        # destDeck = DestinationCard.getDestinationDeck()
 
-        destPoints = destDeck[:, 2]
+        # destPoints = destDeck[:, 2]
 
-        Up1d = np.zeros(len(destDeck))
-        for i in range(len(self.p1dCards)):
-            for j in range(len(destDeck)):
-                if (self.p1dCards[i].getValues() == destDeck[j]).all(): Up1d[j] += 1
+        # Up1d = np.zeros(len(destDeck))
+        # for i in range(len(self.p1dCards)):
+        #     for j in range(len(destDeck)):
+        #         if (self.p1dCards[i].getValues() == destDeck[j]).all(): Up1d[j] += 1
+        #
+        # Up2d = np.zeros(len(destDeck))
+        # for i in range(len(self.p2dCards)):
+        #     for j in range(len(destDeck)):
+        #         if (self.p1dCards[i].getValues() == destDeck[j]).all(): Up2d[j] += 1
 
-        Up2d = np.zeros(len(destDeck))
-        for i in range(len(self.p2dCards)):
-            for j in range(len(destDeck)):
-                if (self.p1dCards[i].getValues() == destDeck[j]).all(): Up2d[j] += 1
-
-        allColors = ['white', 'pink', 'red', 'orange', 'yellow', 'green', 'blue', 'black']
+        allColors = ['white', 'black']  # 'pink', 'red', 'orange', 'yellow', 'green', 'blue',
 
         Up1c = np.zeros(len(allColors))
         for i in range(len(self.p1Hand)):
@@ -157,8 +170,10 @@ class GameState:
             for j in range(len(allColors)):
                 if self.p2Hand[i] == allColors[j]: Up2c[j] += 1
 
-        np.save(file=os.getcwd() + '/thisturn.npy', arr=[self.turn, UtrackArray, Up1c, Up1d, Up2c, Up2d, destPoints
-            , self.p1Points, self.p2Points, self.p1Action, self.p2Action], allow_pickle=True)
+        data = [self.turn, UtrackArray, Up1c, Up2c,  # Up1d, Up2d, destPoints,
+                self.p1Points, self.p2Points, action_map[self.p1Action], action_map[self.p2Action]]
+
+        return np.concatenate([np.array(x).flatten() for x in data])
 
     def returnListedforP(self):
         UtrackArray = np.array(self.trackArray)

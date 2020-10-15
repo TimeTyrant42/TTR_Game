@@ -540,6 +540,7 @@ def gameStart():
 
     # game state array for saving every turn
     GameStateArray = []
+    GameStateArray.append(currentTurn.returnNPY())
 
     while running:
 
@@ -585,7 +586,7 @@ def gameStart():
 
         #currentTurn.writeToCSV(playerOne)  # this line is commented out since the method had not been made yet
 
-        GameStateArray.append(currentTurn.returnListedforP())
+        GameStateArray.append(currentTurn.returnNPY())
         # AI makes its move and stores it in the game state
         p2Move = playerTwo.makeMove(currentTurn)
         currentTurn.setPlayerMove(playerTwo, p2Move[0])
@@ -614,6 +615,9 @@ def gameStart():
 
         #currentTurn.writeToCSV(playerTwo)  # this line is commented out since the method had not been made yet
 
+        GameStateArray.append(currentTurn.returnNPY())
+        currentTurn.incrementTurn()
+
         # check for deadlock
         if currentTurn.getP1Move() == 'pass' and currentTurn.getP2Move() == 'pass':
             print("Since both players passed their turn it is likely the game has reached a deadlock so game ends")
@@ -638,12 +642,16 @@ def gameStart():
         #save each turn for debugging/prototyping
         # currentTurn.writeToNPY()
 
-        GameStateArray.append(currentTurn.returnListedforP())
-        currentTurn.writeToCSV()
-        currentTurn.incrementTurn()
+        # GameStateArray.append(currentTurn.returnListedforP())
+        # currentTurn.writeToCSV()
+        # currentTurn.incrementTurn()
 
         pygame.display.update()
         clock.tick(60)
+
+    # saving full gamestate array to file at end of game
+    np.save(os.getcwd() + '/saves/save.npy', np.array(GameStateArray))
+
     #check destination cards and update player score
     # next lines find and print the winner of the game (all based on points) !!! make it also check for num destination cards completed if score ties
     if playerOne.points > playerTwo.points:
@@ -657,8 +665,6 @@ def gameStart():
 
     titleScreen()
     quit()
-    # saving full gamestate array to file at end of game
-    # np.save(os.getcwd()+'/saves/save.npy', np.array(GameStateArray))
 
 
 titleScreen()
