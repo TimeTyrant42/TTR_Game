@@ -530,10 +530,8 @@ def settings():
         clock.tick(60)
 
 def gameStart():
-
     global playerMode
     createPlayers(playerMode)
-    currentTurn = GameState(0, cityConnection, playerOne, playerTwo)
 
     screen.fill(white)
     screen.blit(BackGround.image, BackGround.rect)
@@ -545,6 +543,7 @@ def gameStart():
     running = True
 
     # game state array for saving every turn
+    currentTurn = GameState(0, cityConnection, playerOne, playerTwo)
     GameStateArray = []
     GameStateArray.append(currentTurn.returnNPY())
 
