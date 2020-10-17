@@ -34,7 +34,7 @@ blue = (0, 0, 255)
 darkBlue = (0, 0, 139)
 
 # makes the screen as wide and tall as above variables, makes a white background, adds TTR title, and starts a clock
-screen = pygame.display.set_mode([display_width, display_height], pygame.FULLSCREEN)
+screen = pygame.display.set_mode([display_width, display_height], pygame.RESIZABLE)
 pygame.display.set_caption("Ticket To Ride")
 clock = pygame.time.Clock()
 
@@ -441,6 +441,12 @@ def getHumanMove():
         pygame.display.update()
         clock.tick(60)
 
+
+def opentxt(file):
+    with open(file) as file:
+        data = [line for line in file]
+    return data
+
 def quitGame():
     pygame.quit()
     quit()
@@ -650,7 +656,13 @@ def gameStart():
         clock.tick(60)
 
     # saving full gamestate array to file at end of game
-    np.save(os.getcwd() + '/saves/save.npy', np.array(GameStateArray))
+
+    numSaves = int(opentxt(os.getcwd() + '/saves/numSaves.txt')[0])
+    if numSaves <= 20:
+        np.save(os.getcwd() + '/saves/save'+str(numSaves)+'.npy', np.array(GameStateArray))
+        numSaves += 1
+        with open(os.getcwd() + '/saves/numSaves.txt', 'w') as f:
+            f.write('%d' % numSaves)
 
     #check destination cards and update player score
     # next lines find and print the winner of the game (all based on points) !!! make it also check for num destination cards completed if score ties
